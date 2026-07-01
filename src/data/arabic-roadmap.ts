@@ -29,11 +29,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-alphabet-2",
         nodeId: "arabic-alphabet",
-        title: "Arabic Alphabet Series",
+        title: "Noorani Qaida Full Course (Arabic Alphabet)",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgpZidZPTHbJfBZME0Wv0R-n",
+        url: "https://www.youtube.com/embed/videoseries?list=PLN153pF22YWbfFjQT4IWbWCHF-c7V7Abg",
         description:
-          "Comprehensive video series covering each letter's pronunciation and writing.",
+          "Complete step-by-step course covering all 28 letters, pronunciation (makharij), and writing from Alif to Yaa.",
         isVerified: true,
       },
     ],
@@ -89,11 +89,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-reading-2",
         nodeId: "basic-reading",
-        title: "Read & Practice Arabic",
+        title: "Learn to Read the Qur'aan (al-Qaaidah an-Nooraaniyyah)",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PLLB2D2kF7TGpF9rCzI0JtW8K9mN0dKzLQ",
+        url: "https://www.youtube.com/embed/videoseries?list=PLMkznvaDGY6_FuUQBmUWBmRs-pnykHtm5",
         description:
-          "Guided reading practice sessions for beginners.",
+          "Complete 25-lesson video course teaching Arabic reading with tajweed using the renowned Qaaidah Nooraniyyah method.",
         isVerified: true,
       },
     ],
@@ -209,11 +209,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-mad1-2",
         nodeId: "madinah-book-1",
-        title: "Madinah Arabic Course (Book 1)",
+        title: "Madinah Arabic Course (Book 1) by Asif Meherali",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgoS5UOZ5s9s9Xz9Yz9X9z9X",
+        url: "https://www.youtube.com/embed/videoseries?list=PL2C51DED07020185B",
         description:
-          "Complete video lectures covering every lesson in Madinah Book 1.",
+          "Complete 18-lesson video course by Br. Asif Meherali, covering every lesson of Madinah Book 1 from the Islamic University of Madinah.",
         isVerified: true,
       },
     ],
@@ -269,11 +269,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-mad2-2",
         nodeId: "madinah-book-2",
-        title: "Madinah Arabic Course (Book 2)",
+        title: "Madinah Arabic Course (Book 2) by Asif Meherali",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgqY6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y",
+        url: "https://www.youtube.com/embed/videoseries?list=PLBDFADAAC4A9DEDF8",
         description:
-          "Step-by-step video explanations for Madinah Book 2.",
+          "Complete video course by Br. Asif Meherali covering all lessons of Madinah Book 2 — verb forms, prepositions, and complex sentences.",
         isVerified: true,
       },
     ],
@@ -329,11 +329,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-mad3-2",
         nodeId: "madinah-book-3",
-        title: "Madinah Arabic Course (Book 3)",
+        title: "Madinah Arabic Course (Book 3) by Asif Meherali",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgrRrRrRrRrRrRrRrRrRrRrRrR",
+        url: "https://www.youtube.com/embed/videoseries?list=PL0456AF8AB89FD3CF",
         description:
-          "Complete video lectures for Madinah Book 3.",
+          "Complete video course by Br. Asif Meherali covering all lessons of Madinah Book 3 — advanced grammar, rhetoric, and classical Arabic structures.",
         isVerified: true,
       },
     ],
@@ -399,11 +399,11 @@ const nodes: RoadmapNode[] = [
       {
         id: "res-inter-3",
         nodeId: "intermediate-arabic",
-        title: "Intermediate Arabic Grammar",
+        title: "Learn Arabic Grammar to Understand Quran (Language of Quran)",
         type: "video",
-        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgvVvVvVvVvVvVvVvVvVvVvVvV",
+        url: "https://www.youtube.com/embed/videoseries?list=PLC2ruw0EUW8BwpE-seNS6i-_zuNq-jFc4",
         description:
-          "Advanced grammar explanations for intermediate learners.",
+          "Comprehensive 34-video course covering advanced Arabic grammar, I'rab, and sentence analysis — ideal after completing Madinah Book 3.",
         isVerified: true,
       },
     ],
