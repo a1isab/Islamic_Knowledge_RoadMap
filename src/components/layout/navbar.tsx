@@ -17,6 +17,7 @@ import { useTheme } from "next-themes"
 
 export function Navbar() {
   const [user, setUser] = useState<{ email?: string } | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -24,8 +25,17 @@ export function Navbar() {
 
   useEffect(() => {
     setMounted(true)
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUser({ email: data.user.email })
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data.user) {
+        setUser({ email: data.user.email })
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .single()
+        const p = profile as { role: string } | null
+        if (p?.role === "admin") setIsAdmin(true)
+      }
     })
   }, [])
 
@@ -87,6 +97,11 @@ export function Navbar() {
                   <DropdownMenuItem>
                     <Link href="/planner">Study Planner</Link>
                   </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem>
+                      <Link href="/admin">Admin</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={handleSignOut}>
                     Sign Out
                   </DropdownMenuItem>
