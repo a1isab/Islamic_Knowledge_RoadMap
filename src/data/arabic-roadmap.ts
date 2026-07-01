@@ -31,12 +31,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "arabic-alphabet",
         title: "Arabic Alphabet Series",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PL6TlMIZ5ylgpZidZPTHbJfBZME0Wv0R-n",
+        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgpZidZPTHbJfBZME0Wv0R-n",
         description:
           "Comprehensive video series covering each letter's pronunciation and writing.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "How many letters does the Arabic alphabet have?",
+          options: ["26", "28", "32", "24"],
+          correctIndex: 1,
+        },
+        {
+          question: "Arabic is read from which direction?",
+          options: ["Left to right", "Right to left", "Top to bottom", "Bottom to top"],
+          correctIndex: 1,
+        },
+        {
+          question: "What is the term for the points of articulation of Arabic letters?",
+          options: ["Tajweed", "Makharij", "Qira'at", "Rasm"],
+          correctIndex: 1,
+        },
+        {
+          question: "How many basic shapes does each Arabic letter have depending on its position?",
+          options: ["2", "3", "4", "5"],
+          correctIndex: 2,
+        },
+      ],
+    },
   },
   {
     id: "basic-reading",
@@ -66,12 +91,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "basic-reading",
         title: "Read & Practice Arabic",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PLLB2D2kF7TGpF9rCzI0JtW8K9mN0dKzLQ",
+        url: "https://www.youtube.com/embed/videoseries?list=PLLB2D2kF7TGpF9rCzI0JtW8K9mN0dKzLQ",
         description:
           "Guided reading practice sessions for beginners.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "What does 'sukoon' indicate in Arabic reading?",
+          options: ["A long vowel", "A doubled letter", "The absence of a vowel", "A nasal sound"],
+          correctIndex: 2,
+        },
+        {
+          question: "What is 'shaddah' in Arabic?",
+          options: ["A pause", "A doubled consonant", "A vowel elongation", "A silent letter"],
+          correctIndex: 1,
+        },
+        {
+          question: "'Madd' refers to what in Arabic recitation?",
+          options: ["Stopping", "Nasalization", "Elongation of a vowel", "Whispering"],
+          correctIndex: 2,
+        },
+        {
+          question: "Which vowel is represented by a 'dammah'?",
+          options: ["A", "I", "U", "No vowel"],
+          correctIndex: 2,
+        },
+      ],
+    },
   },
   {
     id: "basic-vocabulary",
@@ -107,6 +157,31 @@ const nodes: RoadmapNode[] = [
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "Which of the following best describes the Arabic vocabulary learning approach?",
+          options: ["Memorize the dictionary", "Learn words in context with example sentences", "Only learn nouns", "Skip to advanced texts"],
+          correctIndex: 1,
+        },
+        {
+          question: "What is the most effective long-term retention method mentioned for vocabulary?",
+          options: ["Writing words once", "Spaced repetition flashcards", "Reading the dictionary", "Listening without review"],
+          correctIndex: 1,
+        },
+        {
+          question: "How many common Arabic words should a beginner aim to learn?",
+          options: ["50", "100", "200+", "1000+"],
+          correctIndex: 2,
+        },
+        {
+          question: "What makes a word 'everyday vocabulary' in Arabic?",
+          options: ["It is from the Quran", "It is commonly used in daily conversation", "It is a long word", "It is a verb only"],
+          correctIndex: 1,
+        },
+      ],
+    },
   },
   {
     id: "madinah-book-1",
@@ -136,12 +211,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "madinah-book-1",
         title: "Madinah Arabic Course (Book 1)",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PL6TlMIZ5ylgoS5UOZ5s9s9Xz9Yz9X9z9X",
+        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgoS5UOZ5s9s9Xz9Yz9X9z9X",
         description:
           "Complete video lectures covering every lesson in Madinah Book 1.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "Madinah Book 1 primarily teaches which variety of Arabic?",
+          options: ["Colloquial Arabic", "Quranic Arabic", "Modern Standard Arabic", "Egyptian Arabic"],
+          correctIndex: 2,
+        },
+        {
+          question: "Who authored the Madinah Arabic Reader series?",
+          options: ["Ibn Ajurrum", "Dr. V. Abdur Rahim", "Al-Farahidi", "Sibawayh"],
+          correctIndex: 1,
+        },
+        {
+          question: "Which of these is a key grammar topic in Madinah Book 1?",
+          options: ["Advanced rhetoric", "Masculine and feminine forms", "Poetic meter", "Balaghah"],
+          correctIndex: 1,
+        },
+        {
+          question: "Where is the Madinah curriculum originally taught?",
+          options: ["Al-Azhar University", "Islamic University of Madinah", "Umm Al-Qura University", "King Saud University"],
+          correctIndex: 1,
+        },
+      ],
+    },
   },
   {
     id: "madinah-book-2",
@@ -171,12 +271,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "madinah-book-2",
         title: "Madinah Arabic Course (Book 2)",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PL6TlMIZ5ylgqY6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y",
+        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgqY6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y",
         description:
           "Step-by-step video explanations for Madinah Book 2.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "Madinah Book 2 introduces which new concept?",
+          options: ["The alphabet", "Derived verbs (awzan)", "Noun genders", "Writing practice"],
+          correctIndex: 1,
+        },
+        {
+          question: "Prepositions in Arabic are called?",
+          options: ["Ism", "Fi'l", "Harf jarr", "Dhamir"],
+          correctIndex: 2,
+        },
+        {
+          question: "What does a possessive structure in Arabic typically use?",
+          options: ["Idafah construction", "Separate pronouns only", "Prepositional phrases", "Passive voice"],
+          correctIndex: 0,
+        },
+        {
+          question: "How does Madinah Book 2 build on Book 1?",
+          options: ["It repeats the same material", "It introduces more complex sentence structures", "It focuses only on vocabulary", "It teaches calligraphy"],
+          correctIndex: 1,
+        },
+      ],
+    },
   },
   {
     id: "madinah-book-3",
@@ -206,12 +331,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "madinah-book-3",
         title: "Madinah Arabic Course (Book 3)",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PL6TlMIZ5ylgrRrRrRrRrRrRrRrRrRrRrRrR",
+        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgrRrRrRrRrRrRrRrRrRrRrRrR",
         description:
           "Complete video lectures for Madinah Book 3.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "Madinah Book 3 focuses on which level of Arabic?",
+          options: ["Beginner", "Intermediate-Advanced grammar and rhetoric", "Only vocabulary", "Poetry only"],
+          correctIndex: 1,
+        },
+        {
+          question: "Rhetorical styles in Arabic are studied under which branch?",
+          options: ["Nahw (Grammar)", "Sarf (Morphology)", "Balaghah (Rhetoric)", "Arud (Prosody)"],
+          correctIndex: 2,
+        },
+        {
+          question: "Classical Arabic structures in Book 3 include?",
+          options: ["Only modern phrases", "Complex sentence analysis and classical texts", "Only Quranic verses", "Only conversational dialogues"],
+          correctIndex: 1,
+        },
+        {
+          question: "What is expected of a student completing Madinah Book 3?",
+          options: ["Basic reading ability", "Mastery of advanced grammar and ability to read classical texts", "Conversational fluency only", "Memorization of the dictionary"],
+          correctIndex: 1,
+        },
+      ],
+    },
   },
   {
     id: "intermediate-arabic",
@@ -251,12 +401,37 @@ const nodes: RoadmapNode[] = [
         nodeId: "intermediate-arabic",
         title: "Intermediate Arabic Grammar",
         type: "video",
-        url: "https://www.youtube.com/playlist?list=PL6TlMIZ5ylgvVvVvVvVvVvVvVvVvVvVvVvV",
+        url: "https://www.youtube.com/embed/videoseries?list=PL6TlMIZ5ylgvVvVvVvVvVvVvVvVvVvVvVvV",
         description:
           "Advanced grammar explanations for intermediate learners.",
         isVerified: true,
       },
     ],
+    quiz: {
+      passingScore: 3,
+      questions: [
+        {
+          question: "What is the primary focus of Al-Arabiyyah Bayna Yadayk?",
+          options: ["Classical poetry", "Modern Arabic communication skills", "Ancient texts", "Calligraphy"],
+          correctIndex: 1,
+        },
+        {
+          question: "Al-Ajrumiyyah is a foundational text in which field?",
+          options: ["Tafseer", "Hadith", "Arabic grammar (Nahw)", "Islamic history"],
+          correctIndex: 2,
+        },
+        {
+          question: "Who authored Al-Ajrumiyyah?",
+          options: ["Dr. V. Abdur Rahim", "Ibn Ajurrum", "Imam Al-Ghazali", "Ibn Kathir"],
+          correctIndex: 1,
+        },
+        {
+          question: "What makes this stage 'advanced' compared to earlier stages?",
+          options: ["It introduces the alphabet", "It focuses on advanced grammar and classical text analysis", "It only has videos", "It is optional"],
+          correctIndex: 1,
+        },
+      ],
+    },
   },
 ]
 

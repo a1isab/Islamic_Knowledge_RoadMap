@@ -26,8 +26,17 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
 import {
   BookOpenText,
   CheckCircle2,
@@ -36,12 +45,17 @@ import {
   ChevronLeft,
   BookMarked,
   Bookmark,
+  Video,
+  HelpCircle,
+  XCircle,
+  Award,
 } from "lucide-react"
 import { getRoadmapBySlug, getNodeById } from "@/data/arabic-roadmap"
 import type {
   RoadmapNode,
   UserProgress,
   Roadmap,
+  QuizQuestion,
 } from "@/types/roadmap"
 import { toast } from "sonner"
 
@@ -211,8 +225,37 @@ export default function RoadmapDetailPage() {
     })
   }
 
+  const openQuiz = () => {
+    if (!selectedNode?.quiz) return
+    setQuizAnswers(new Array(selectedNode.quiz.questions.length).fill(-1))
+    setQuizSubmitted(false)
+    setQuizScore(0)
+    setQuizPassed(false)
+    setQuizOpen(true)
+  }
+
+  const submitQuiz = () => {
+    if (!selectedNode?.quiz) return
+    const correct = selectedNode.quiz.questions.reduce((count, q, i) => {
+      return count + (quizAnswers[i] === q.correctIndex ? 1 : 0)
+    }, 0)
+    setQuizScore(correct)
+    setQuizSubmitted(true)
+    if (correct >= selectedNode.quiz.passingScore) {
+      setQuizPassed(true)
+      toast.success(`You passed! ${correct}/${selectedNode.quiz.questions.length}`)
+    } else {
+      toast.error(`You got ${correct}/${selectedNode.quiz.questions.length}. Try again.`)
+    }
+  }
+
   const handleToggleComplete = async () => {
     if (!selectedNode || !user) return
+
+    if (selectedNode.quiz && !quizPassed) {
+      openQuiz()
+      return
+    }
 
     const currentStatus = getNodeStatus(selectedNode.id)?.status
     const newStatus = currentStatus === "completed" ? "in_progress" : "completed"
@@ -252,10 +295,15 @@ export default function RoadmapDetailPage() {
     })
 
     toast.success(
-      newStatus === "completed" ? "Node completed! 🎉" : "Node marked in progress"
+      newStatus === "completed" ? "Node completed!" : "Node marked in progress"
     )
   }
 
+  const [quizOpen, setQuizOpen] = useState(false)
+  const [quizAnswers, setQuizAnswers] = useState<number[]>([])
+  const [quizSubmitted, setQuizSubmitted] = useState(false)
+  const [quizScore, setQuizScore] = useState(0)
+  const [quizPassed, setQuizPassed] = useState(false)
   const completedNodes = progress.filter((p) => p.status === "completed").length
   const totalNodes = roadmap?.nodes.length || 0
   const completionPercent = totalNodes > 0 ? (completedNodes / totalNodes) * 100 : 0
@@ -377,51 +425,84 @@ export default function RoadmapDetailPage() {
 
                 <Separator />
 
-                <div>
-                  <h4 className="mb-3 font-semibold flex items-center gap-2">
-                    <BookOpenText className="h-4 w-4" />
-                    Resources
-                  </h4>
-                  <div className="space-y-3">
-                    {selectedNode.resources.map((resource) => (
-                      <div
-                        key={resource.id}
-                        className="rounded-lg border p-3 transition-colors hover:bg-muted/50"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-sm">
-                              {resource.title}
-                            </p>
-                            {resource.author && (
-                              <p className="text-xs text-muted-foreground">
-                                by {resource.author}
-                              </p>
+                {selectedNode.resources.filter((r) => r.type === "video" && r.url).length > 0 && (
+                  <div>
+                    <h4 className="mb-3 font-semibold flex items-center gap-2">
+                      <Video className="h-4 w-4 text-red-500" />
+                      Video Lessons
+                    </h4>
+                    <div className="space-y-4">
+                      {selectedNode.resources
+                        .filter((r) => r.type === "video" && r.url)
+                        .map((resource) => (
+                          <div key={resource.id} className="space-y-2">
+                            <p className="text-sm font-medium">{resource.title}</p>
+                            <div className="aspect-video w-full overflow-hidden rounded-lg">
+                              <iframe
+                                src={resource.url}
+                                className="h-full w-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                            {resource.description && (
+                              <p className="text-xs text-muted-foreground">{resource.description}</p>
                             )}
                           </div>
-                          <Badge variant="outline" className="text-xs">
-                            {resource.type}
-                          </Badge>
-                        </div>
-                        {resource.description && (
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {resource.description}
-                          </p>
-                        )}
-                        {resource.url && (
-                          <a
-                            href={resource.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 inline-flex text-xs font-medium text-primary hover:underline"
-                          >
-                            View resource
-                          </a>
-                        )}
-                      </div>
-                    ))}
+                        ))}
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {selectedNode.resources.filter((r) => r.type !== "video").length > 0 && (
+                  <div>
+                    <h4 className="mb-3 font-semibold flex items-center gap-2">
+                      <BookOpenText className="h-4 w-4" />
+                      Additional Resources
+                    </h4>
+                    <div className="space-y-3">
+                      {selectedNode.resources
+                        .filter((r) => r.type !== "video")
+                        .map((resource) => (
+                          <div
+                            key={resource.id}
+                            className="rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <p className="font-medium text-sm">
+                                  {resource.title}
+                                </p>
+                                {resource.author && (
+                                  <p className="text-xs text-muted-foreground">
+                                    by {resource.author}
+                                  </p>
+                                )}
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {resource.type}
+                              </Badge>
+                            </div>
+                            {resource.description && (
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {resource.description}
+                              </p>
+                            )}
+                            {resource.url && (
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex text-xs font-medium text-primary hover:underline"
+                              >
+                                View resource
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
 
                 <Separator />
 
@@ -464,6 +545,44 @@ export default function RoadmapDetailPage() {
 
                 <Separator />
 
+                {selectedNode.quiz && (
+                  <div>
+                    <h4 className="mb-3 font-semibold flex items-center gap-2">
+                      <HelpCircle className="h-4 w-4" />
+                      Knowledge Check
+                    </h4>
+                    <div className="rounded-lg border bg-muted/30 p-4">
+                      {quizPassed ? (
+                        <div className="flex flex-col items-center gap-2 py-2 text-center">
+                          <Award className="h-8 w-8 text-green-500" />
+                          <p className="font-medium text-green-600 dark:text-green-400">
+                            Quiz passed! {quizScore}/{selectedNode.quiz.questions.length}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            You can now mark this node as complete.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          <p className="text-sm text-muted-foreground">
+                            Pass the quiz ({selectedNode.quiz.passingScore}/{selectedNode.quiz.questions.length} correct) to unlock completion.
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full gap-2"
+                            onClick={openQuiz}
+                          >
+                            <HelpCircle className="h-4 w-4" /> Start Quiz
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <Separator />
+
                 <div className="flex gap-3">
                   <Button
                     className="flex-1 gap-2"
@@ -474,8 +593,9 @@ export default function RoadmapDetailPage() {
                     }
                     onClick={handleToggleComplete}
                     disabled={
-                      !isNodeAvailable(selectedNode) &&
-                      getNodeStatus(selectedNode.id)?.status !== "completed"
+                      (!isNodeAvailable(selectedNode) &&
+                        getNodeStatus(selectedNode.id)?.status !== "completed") ||
+                      (selectedNode.quiz && !quizPassed && getNodeStatus(selectedNode.id)?.status !== "completed")
                     }
                   >
                     {getNodeStatus(selectedNode.id)?.status === "completed" ? (
@@ -486,7 +606,9 @@ export default function RoadmapDetailPage() {
                       <>
                         <Circle className="h-4 w-4" />{" "}
                         {isNodeAvailable(selectedNode)
-                          ? "Mark Complete"
+                          ? selectedNode.quiz && !quizPassed
+                            ? "Pass quiz to complete"
+                            : "Mark Complete"
                           : "Complete prerequisites first"}
                       </>
                     )}
@@ -500,6 +622,94 @@ export default function RoadmapDetailPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      <Dialog open={quizOpen} onOpenChange={(open) => { if (!open && !quizPassed) { setQuizOpen(false) } }}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          {selectedNode?.quiz && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-primary" />
+                  Knowledge Check
+                </DialogTitle>
+                <DialogDescription>
+                  Answer all questions correctly to pass (passing: {selectedNode.quiz.passingScore}/{selectedNode.quiz.questions.length}).
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-6 py-4">
+                {selectedNode.quiz.questions.map((q, qi) => (
+                  <div key={qi} className="space-y-3">
+                    <p className="font-medium text-sm">
+                      {qi + 1}. {q.question}
+                    </p>
+                    <RadioGroup
+                      value={quizAnswers[qi]?.toString() ?? ""}
+                      onValueChange={(v) => {
+                        const next = [...quizAnswers]
+                        next[qi] = parseInt(v)
+                        setQuizAnswers(next)
+                      }}
+                      disabled={quizSubmitted}
+                    >
+                      {q.options.map((opt, oi) => {
+                        let className = "flex items-center gap-2 rounded-lg border px-3 py-2 text-sm"
+                        if (quizSubmitted) {
+                          if (oi === q.correctIndex) className += " border-green-500 bg-green-50 dark:bg-green-950"
+                          else if (oi === quizAnswers[qi] && oi !== q.correctIndex) className += " border-red-500 bg-red-50 dark:bg-red-950"
+                        }
+                        return (
+                          <div key={oi} className={className}>
+                            <RadioGroupItem value={oi.toString()} id={`q${qi}-o${oi}`} />
+                            <Label htmlFor={`q${qi}-o${oi}`} className="flex-1 cursor-pointer">{opt}</Label>
+                            {quizSubmitted && oi === q.correctIndex && <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />}
+                            {quizSubmitted && oi === quizAnswers[qi] && oi !== q.correctIndex && <XCircle className="h-4 w-4 text-red-500 shrink-0" />}
+                          </div>
+                        )
+                      })}
+                    </RadioGroup>
+                  </div>
+                ))}
+              </div>
+
+              {quizSubmitted ? (
+                <div className="space-y-3">
+                  <div className={`flex items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium ${quizPassed ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"}`}>
+                    {quizPassed ? (
+                      <><Award className="h-5 w-5" /> Passed! {quizScore}/{selectedNode.quiz.questions.length}</>
+                    ) : (
+                      <><XCircle className="h-5 w-5" /> {quizScore}/{selectedNode.quiz.questions.length} — try again</>
+                    )}
+                  </div>
+                  {quizPassed ? (
+                    <Button className="w-full gap-2" onClick={() => { setQuizOpen(false) }}>
+                      <CheckCircle2 className="h-4 w-4" /> Continue
+                    </Button>
+                  ) : (
+                    <Button className="w-full gap-2" variant="outline" onClick={() => {
+                      if (selectedNode?.quiz) {
+                        setQuizAnswers(new Array(selectedNode.quiz.questions.length).fill(-1))
+                      }
+                      setQuizSubmitted(false)
+                      setQuizScore(0)
+                    }}>
+                      <HelpCircle className="h-4 w-4" /> Retry Quiz
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  className="w-full gap-2"
+                  onClick={submitQuiz}
+                  disabled={quizAnswers.some((a) => a === -1)}
+                >
+                  <CheckCircle2 className="h-4 w-4" /> Submit Answers
+                </Button>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

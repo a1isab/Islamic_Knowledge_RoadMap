@@ -22,6 +22,17 @@ export interface Resource {
   isVerified: boolean
 }
 
+export interface QuizQuestion {
+  question: string
+  options: string[]
+  correctIndex: number
+}
+
+export interface Quiz {
+  questions: QuizQuestion[]
+  passingScore: number
+}
+
 export interface RoadmapNode {
   id: string
   roadmapId: string
@@ -34,6 +45,7 @@ export interface RoadmapNode {
   sortOrder: number
   stage: number
   resources: Resource[]
+  quiz?: Quiz
 }
 
 export interface Roadmap {
