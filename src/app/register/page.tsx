@@ -22,32 +22,29 @@ export default function RegisterPage() {
     e.preventDefault()
     setLoading(true)
 
-    const { error, data } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
         },
-      },
-    })
-
-    if (error) {
-      toast.error(error.message)
-      setLoading(false)
-      return
-    }
-
-    if (data.user) {
-      await supabase.from("profiles").insert({
-        id: data.user.id,
-        full_name: fullName,
-        study_minutes_daily: 30,
       })
+
+      if (error) {
+        toast.error(error.message)
+        setLoading(false)
+        return
+      }
+
+      toast.success("Check your email to confirm your account")
+      router.push("/login")
+    } catch (err) {
+      toast.error("Network error — could not reach server. Check your connection and try again.")
     }
 
-    toast.success("Check your email to confirm your account")
-    router.push("/login")
     setLoading(false)
   }
 
