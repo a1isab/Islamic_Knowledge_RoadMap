@@ -20,13 +20,6 @@ import { Navbar } from "@/components/layout/navbar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -43,7 +36,6 @@ import {
   Circle,
   Clock,
   ChevronLeft,
-  BookMarked,
   Bookmark,
   Video,
   HelpCircle,
@@ -55,7 +47,6 @@ import type {
   RoadmapNode,
   UserProgress,
   Roadmap,
-  QuizQuestion,
 } from "@/types/roadmap"
 import { toast } from "sonner"
 
@@ -147,7 +138,9 @@ export default function RoadmapDetailPage() {
   const [user, setUser] = useState<any>(null)
   const [progress, setProgress] = useState<UserProgress[]>([])
   const [selectedNode, setSelectedNode] = useState<RoadmapNode | null>(null)
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const [nodeDialogOpen, setNodeDialogOpen] = useState(false)
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
+  const [pdfUrl, setPdfUrl] = useState("")
   const [loading, setLoading] = useState(true)
 
   const roadmap = useMemo(() => getRoadmapBySlug(slug), [slug])
@@ -203,7 +196,7 @@ export default function RoadmapDetailPage() {
       const roadmapNode = roadmap?.nodes.find((n) => n.id === node.id)
       if (roadmapNode) {
         setSelectedNode(roadmapNode)
-        setSheetOpen(true)
+        setNodeDialogOpen(true)
       }
     },
     [roadmap]
@@ -395,11 +388,11 @@ export default function RoadmapDetailPage() {
         </div>
       </main>
 
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+      <Dialog open={nodeDialogOpen} onOpenChange={setNodeDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto" showCloseButton>
           {selectedNode && (
             <>
-              <SheetHeader>
+              <DialogHeader>
                 <div className="flex items-center gap-2">
                   <Badge
                     variant="secondary"
@@ -409,13 +402,13 @@ export default function RoadmapDetailPage() {
                   </Badge>
                   <Badge variant="outline">Stage {selectedNode.stage}</Badge>
                 </div>
-                <SheetTitle className="mt-2 text-xl">
+                <DialogTitle className="mt-2 text-xl">
                   {selectedNode.title}
-                </SheetTitle>
-                <SheetDescription>
+                </DialogTitle>
+                <DialogDescription>
                   {selectedNode.description}
-                </SheetDescription>
-              </SheetHeader>
+                </DialogDescription>
+              </DialogHeader>
 
               <div className="mt-6 space-y-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -458,7 +451,7 @@ export default function RoadmapDetailPage() {
                   <div>
                     <h4 className="mb-3 font-semibold flex items-center gap-2">
                       <BookOpenText className="h-4 w-4" />
-                      Additional Resources
+                      Reading Materials
                     </h4>
                     <div className="space-y-3">
                       {selectedNode.resources
@@ -488,7 +481,19 @@ export default function RoadmapDetailPage() {
                                 {resource.description}
                               </p>
                             )}
-                            {resource.url && (
+                            {resource.url && resource.type === "book" ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="mt-2 gap-1 text-xs"
+                                onClick={() => {
+                                  setPdfUrl(resource.url!)
+                                  setPdfViewerOpen(true)
+                                }}
+                              >
+                                <BookOpenText className="h-3 w-3" /> Open PDF
+                              </Button>
+                            ) : resource.url ? (
                               <a
                                 href={resource.url}
                                 target="_blank"
@@ -497,7 +502,7 @@ export default function RoadmapDetailPage() {
                               >
                                 View resource
                               </a>
-                            )}
+                            ) : null}
                           </div>
                         ))}
                     </div>
@@ -620,8 +625,20 @@ export default function RoadmapDetailPage() {
               </div>
             </>
           )}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={pdfViewerOpen} onOpenChange={setPdfViewerOpen}>
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] max-h-[90vh] p-0" showCloseButton>
+          {pdfUrl && (
+            <iframe
+              src={pdfUrl}
+              className="h-full w-full rounded-xl"
+              title="PDF Viewer"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={quizOpen} onOpenChange={(open) => { if (!open && !quizPassed) { setQuizOpen(false) } }}>
         <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
