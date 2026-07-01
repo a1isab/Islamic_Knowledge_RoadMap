@@ -15,6 +15,8 @@ import {
   BackgroundVariant,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { createClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/layout/navbar"
 import { Badge } from "@/components/ui/badge"
@@ -37,7 +39,6 @@ import {
   Clock,
   ChevronLeft,
   Bookmark,
-  Video,
   HelpCircle,
   XCircle,
   Award,
@@ -139,8 +140,6 @@ export default function RoadmapDetailPage() {
   const [progress, setProgress] = useState<UserProgress[]>([])
   const [selectedNode, setSelectedNode] = useState<RoadmapNode | null>(null)
   const [nodeDialogOpen, setNodeDialogOpen] = useState(false)
-  const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
-  const [pdfUrl, setPdfUrl] = useState("")
   const [loading, setLoading] = useState(true)
 
   const roadmap = useMemo(() => getRoadmapBySlug(slug), [slug])
@@ -418,91 +417,64 @@ export default function RoadmapDetailPage() {
 
                 <Separator />
 
-                {selectedNode.resources.filter((r) => r.type === "video" && r.url).length > 0 && (
-                  <div>
-                    <h4 className="mb-3 font-semibold flex items-center gap-2">
-                      <Video className="h-4 w-4 text-red-500" />
-                      Video Lessons
-                    </h4>
-                    <div className="space-y-4">
-                      {selectedNode.resources
-                        .filter((r) => r.type === "video" && r.url)
-                        .map((resource) => (
-                          <div key={resource.id} className="space-y-2">
-                            <p className="text-sm font-medium">{resource.title}</p>
-                            <div className="aspect-video w-full overflow-hidden rounded-lg">
-                              <iframe
-                                src={resource.url}
-                                className="h-full w-full"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              />
-                            </div>
-                            {resource.description && (
-                              <p className="text-xs text-muted-foreground">{resource.description}</p>
-                            )}
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                )}
-
-                {selectedNode.resources.filter((r) => r.type !== "video").length > 0 && (
+                {selectedNode.resources.filter((r) => r.type === "guide" && r.content).length > 0 && (
                   <div>
                     <h4 className="mb-3 font-semibold flex items-center gap-2">
                       <BookOpenText className="h-4 w-4" />
-                      Reading Materials
+                      Study Guide
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-6">
                       {selectedNode.resources
-                        .filter((r) => r.type !== "video")
+                        .filter((r) => r.type === "guide" && r.content)
                         .map((resource) => (
                           <div
                             key={resource.id}
-                            className="rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                            className="rounded-lg border p-5"
                           >
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <p className="font-medium text-sm">
-                                  {resource.title}
-                                </p>
-                                {resource.author && (
-                                  <p className="text-xs text-muted-foreground">
-                                    by {resource.author}
-                                  </p>
-                                )}
-                              </div>
-                              <Badge variant="outline" className="text-xs">
-                                {resource.type}
-                              </Badge>
-                            </div>
-                            {resource.description && (
-                              <p className="mt-1 text-xs text-muted-foreground">
-                                {resource.description}
-                              </p>
-                            )}
-                            {resource.url && resource.type === "book" ? (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="mt-2 gap-1 text-xs"
-                                onClick={() => {
-                                  setPdfUrl(resource.url!)
-                                  setPdfViewerOpen(true)
+                            <div className="markdown text-sm leading-relaxed space-y-3">
+                              <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                  h2: ({ children }) => (
+                                    <h3 className="text-base font-semibold mt-5 mb-2">
+                                      {children}
+                                    </h3>
+                                  ),
+                                  h3: ({ children }) => (
+                                    <h4 className="text-sm font-semibold mt-4 mb-1">
+                                      {children}
+                                    </h4>
+                                  ),
+                                  ul: ({ children }) => (
+                                    <ul className="list-disc pl-5 space-y-1">
+                                      {children}
+                                    </ul>
+                                  ),
+                                  ol: ({ children }) => (
+                                    <ol className="list-decimal pl-5 space-y-1">
+                                      {children}
+                                    </ol>
+                                  ),
+                                  li: ({ children }) => <li>{children}</li>,
+                                  p: ({ children }) => (
+                                    <p className="mb-1">{children}</p>
+                                  ),
+                                  strong: ({ children }) => (
+                                    <strong className="font-semibold">
+                                      {children}
+                                    </strong>
+                                  ),
+                                  code: ({ children }) => (
+                                    <code className="rounded bg-muted px-1 py-0.5 text-xs">
+                                      {children}
+                                    </code>
+                                  ),
+                                  hr: () => <hr className="my-4 border-border" />,
                                 }}
                               >
-                                <BookOpenText className="h-3 w-3" /> Open PDF
-                              </Button>
-                            ) : resource.url ? (
-                              <a
-                                href={resource.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-2 inline-flex text-xs font-medium text-primary hover:underline"
-                              >
-                                View resource
-                              </a>
-                            ) : null}
+                                {resource.content}
+                              </ReactMarkdown>
+                            </div>
                           </div>
                         ))}
                     </div>
@@ -624,18 +596,6 @@ export default function RoadmapDetailPage() {
                 </div>
               </div>
             </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={pdfViewerOpen} onOpenChange={setPdfViewerOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] max-h-[90vh] p-0" showCloseButton>
-          {pdfUrl && (
-            <iframe
-              src={pdfUrl}
-              className="h-full w-full rounded-xl"
-              title="PDF Viewer"
-            />
           )}
         </DialogContent>
       </Dialog>

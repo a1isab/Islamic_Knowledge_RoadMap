@@ -15,10 +15,11 @@ export interface Resource {
   id: string
   nodeId: string
   title: string
-  type: "book" | "video" | "article" | "course"
+  type: "book" | "video" | "article" | "course" | "guide"
   url?: string
   author?: string
   description?: string
+  content?: string
   isVerified: boolean
 }
 

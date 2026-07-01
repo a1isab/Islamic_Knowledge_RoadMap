@@ -9,7 +9,7 @@ const cspHeader = `
   object-src 'none';
   base-uri 'self';
   form-action 'self';
-  frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://docs.google.com https://drive.google.com;
+  frame-src 'self';
   frame-ancestors 'none';
   upgrade-insecure-requests;
   connect-src 'self' https://*.supabase.co ws://localhost:*;
